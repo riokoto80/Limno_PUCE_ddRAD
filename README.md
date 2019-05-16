@@ -44,6 +44,62 @@ _Pipe_ (linea vertical) nos permite continuar la sintyaxs de un inpùt como el o
 
 El símbolo > nos permite generar un archivo nuevo  a partir del output  de una funcion.
 
+#### Demultiplexing Vero
+
+####**Example code for pool 1:** 
+
+>process\_radtags -P -b ./Barcode\_P1\_R1.txt -c -q -r --inline\_index --renz\_1 ecoRI --renz\_2 mspI -p ./raw/Pool1\_R1R2 -o ./Output\_P1\_R1R2\_B --inline\_null
+
+>-P: Demultiplexing the two runs (R1 and R2)  
+-b: Barcode file  
+-p: Raw files  
+-o: Output directory
+
+>Click [here](http://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php) for additional process_radtags options
+
+####**Results - demultiplexing  with process\_radtags**  
+**Pool 1:**  
+27132412 total sequences  
+   79572 barcode not found drops (0.3%)  
+   33396 low quality read drops (0.1%)  
+  190903 RAD cutsite not found drops (0.7%)  
+26828541 retained reads (98.9%)
+
+**Pool 2:**  
+
+**Pool 3:**  
+20637354 total sequences  
+   84620 barcode not found drops (0.4%)  
+   25263 low quality read drops (0.1%)  
+  157634 RAD cutsite not found drops (0.8%)  
+20369837 retained reads (98.7%)
+
+**Pool 4:**  
+26747308 total sequences  
+   90238 barcode not found drops (0.3%)  
+   33530 low quality read drops (0.1%)  
+  183589 RAD cutsite not found drops (0.7%)  
+26439951 retained reads (98.9%)    
+
+**Pool 5:**  
+
+**Pool 6:**  
+24683186 total sequences  
+   87448 barcode not found drops (0.4%)  
+   28906 low quality read drops (0.1%)  
+  144436 RAD cutsite not found drops (0.6%)  
+24422396 retained reads (98.9%)  
+
+**Pool 7:**  
+
+**Pool 8:**  
+
+**IMPORTANT NOTES:**  
+If error: "(filenames can consist of letters, numbers, '.', '-' and '_')", there are probably errors in the barcode file (i.e. extra spaces or unwanted simbols).  
+> * Solution: open the barcodes file with TextWrangler, click on View -> Text Display -> Show invisibles
+>   * This shows spaces, line breaks, etc.  
+>   * Remove excess spaces or unwanted symbols 
+
 
 
 ## ##Denovo mapping
@@ -87,6 +143,53 @@ e.g. archivo > **001And_G14V.1.fq.gz**
 se puede marcar cada sección del nombre de archivo mediante un _Grep_ usando la siguiente expresión regular en TextWrangler:
 
 **IMG01**
+
+#### denovo_map **Vero**
+denovo_map.pl: "Wrapper" que llama a un montón de programas (e.g. ustacks, cstacks, gstacks).  
+Se necesita la linea de comando completo con todos los nombres de los archivos de los outputs del demultiplexing. Se necesita además un popmap file.
+>Popmap file: describe las poblaciones a las que pertenecen los individuos.
+
+## Notas _de novo_ sequencing macroinvertebrates
+
+###Primero: hay que crear un archivo con los codigos de los individuos y los sitios a los que pertenecen.
+
+Para hacer esto:  
+
+1. Hacer una lista de todos los archivos de la carpeta donde estan las muestras. Para esto:
+
+	ls > newfilename.txt  
+	**¡Importante 1!** antes se debe cambiar el directorio (con cd) para estar en la carpeta donde están los archivos (samples).  
+	**¡Importante 2!** borrar los archivos innecesarios como los rem (removidos durante el demultiplexing). También, si solo se va a analizar los R1, dejar solo los archivos de read 1. 
+	  
+2. Editar el archivo en TextWrangler para borrar partes innecesarias:   
+
+	En el nombre: **001And_G14V.1.fq.gz** no es necesario todo lo que va después del punto. Además, falta otra columna con el nombre (o código de los sitios). Para modificar todo esto:
+ 
+[Codigo grep](/https://github.com/riokoto80/Limno_PUCE_ddRAD/blob/master/Fotos/GrepTW.jpg)
+
+De esta forma, se genera un archivo de texto con el formato correcto:
+
+[PopMap file](https://github.com/riokoto80/Limno_PUCE_ddRAD/blob/master/Fotos/ScreenShot_PopMap.jpg)
+
+NOTA: ¡¡¡Cuidar que los mismos sitios tengan el mismo nombre!!!
+> Algunos bichos dicen "Purg" y otros "Pur"
+> Se puede corregir esto con un grep:
+> ... insert image
+
+###Segundo: denovo sequencing
+
+Se usa el programa **`denovo_map.pl`**
+
+Código: `denovo_map.pl -M 3 -n 2 -o ./DeNovo_And_R1/ --popmap ./PopMap_And_R1.txt --samples ./Andesiops_R1`
+> -o: output directory  
+> --popmap: archivo popmap  
+> --samples: directorio donde están las muestras  
+> -M y -n son parámetros de STACKS 
+	
+	
+	 
+
+
 
 
 
