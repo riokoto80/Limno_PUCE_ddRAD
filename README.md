@@ -165,7 +165,7 @@ Para hacer esto:
 
 	En el nombre: **001And_G14V.1.fq.gz** no es necesario todo lo que va después del punto. Además, falta otra columna con el nombre (o código de los sitios). Para modificar todo esto:
  
-![Codigo grep](/https://github.com/riokoto80/Limno_PUCE_ddRAD/blob/master/Fotos/GrepTW.jpg)
+![Codigo grep](https://github.com/riokoto80/Limno_PUCE_ddRAD/blob/master/Fotos/GrepTW.jpg)
 
 De esta forma, se genera un archivo de texto con el formato correcto:
 
