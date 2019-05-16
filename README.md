@@ -161,7 +161,7 @@ Para hacer esto:
 	**¡Importante 1!** antes se debe cambiar el directorio (con cd) para estar en la carpeta donde están los archivos (samples).  
 	**¡Importante 2!** borrar los archivos innecesarios como los rem (removidos durante el demultiplexing). También, si solo se va a analizar los R1, dejar solo los archivos de read 1. 
 	  
-2. Editar el archivo en TextWrangler para borrar partes innecesarias:   
+2. Editar el archivo en TextWrangler o BBEdit para borrar partes innecesarias:   
 
 	En el nombre: **001And_G14V.1.fq.gz** no es necesario todo lo que va después del punto. Además, falta otra columna con el nombre (o código de los sitios). Para modificar todo esto:
  
