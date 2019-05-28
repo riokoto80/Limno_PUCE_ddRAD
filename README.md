@@ -187,10 +187,48 @@ Código: `denovo_map.pl -M 3 -n 2 -o ./DeNovo_And_R1/ --popmap ./PopMap_And_R1.t
 > -M y -n son parámetros de STACKS 
 	
 	
-	 
+###Tercero: denovo genotyping
+
+Vamos a probar los parámetro óptimos a ser utilizados:
+
+**Para Andesiops:**
+
+> m: 4, 5 & 6
+ 
+> M: 6 & 7
+
+> n: 6 y 7 ( n = M & m = M + 1)
+
+**`Que da igual a 12 combinaciones.`**
+
+**Para Hyalella:**
+
+> m: 5, 6 y 7
+
+> M: 6 & 7
+
+> n: 6 y 7 ( n = M & m = M + 1)
+ 	 
+**`Que da igual a 12 combinaciones.`**
+
+Se creó un archivo ejecutable **.sh** donde se pone todo lo que hay que hacer, **p.e.** crear 12 carpetas de las combinaciones mencionadas anteriormente y los comandos de **denovo.map.pl** en este archivo. 
+
+Para esto hicimos:
+
+> macs-MacBook-Pro-2:Limno_PUCE_ddRAD macuser$ chmod +x /Users/macuser/Documents/GenomicaPUCE/MingaGenomica/Hyalella_1.sh 
+> 
+> _chmod se lo puede hacer desde cualquier ubicación en mi caso lo hice desde Limno_PUCE_ddRAD_
+
+>  macs-MacBook-Pro-2:MingaGenomica macuser$ ./Hyalella_1.sh 
 
 
+## Manejo de Github:
 
+`macs-MacBook-Pro-2:MingaGenomica macuser$ which git`
 
+Para saber si está instalado el Github y sale:
 
-## ##Populations
+> /usr/local/bin/git >  **ubicación del git en la computadora**
+
+**Resto de pasos ver en la página web de la Paty:** https://github.com/pesalerno/MingaGenomica2019/blob/master/git-minga.md
+
