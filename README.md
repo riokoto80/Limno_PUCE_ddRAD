@@ -211,7 +211,7 @@ Vamos a probar los parámetro óptimos a ser utilizados:
  	 
 **`Que da igual a 12 combinaciones.`**
 
-Se creó un archivo ejecutable **.sh** donde se pone todo lo que hay que hacer, **p.e.** crear 12 carpetas de las combinaciones mencionadas anteriormente y los comandos de **denovo.map.pl** en este archivo. 
+Se creó un archivo ejecutable **.sh** donde se pone todo lo que va a correr en el terminal, **p.e.** crear 12 carpetas de las combinaciones mencionadas anteriormente y los comandos de **denovo.map.pl** en este archivo. 
 
 Para esto hicimos:
 
@@ -231,4 +231,12 @@ Para saber si está instalado el Github y sale:
 > /usr/local/bin/git >  **ubicación del git en la computadora**
 
 **Resto de pasos ver en la página web de la Paty:** https://github.com/pesalerno/MingaGenomica2019/blob/master/git-minga.md
+
+**Para colaborar:**
+
+**Se lo realiza mediante el comando _git pull_, siguiendo los siguientes pasos de la página de la Paty:** 
+https://github.com/pesalerno/PUMAgenomics/blob/master/git-collaborating-protocol.md
+
+
+
 
