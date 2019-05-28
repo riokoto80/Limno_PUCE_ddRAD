@@ -189,7 +189,7 @@ Código: `denovo_map.pl -M 3 -n 2 -o ./DeNovo_And_R1/ --popmap ./PopMap_And_R1.t
 	
 ###Tercero: denovo genotyping
 
-Vamos a probar los parámetro óptimos a ser utilizados:
+Vamos a probar los parámetro óptimos a ser utilizados (para referencia ver página: https://github.com/pesalerno/MingaGenomica2019, donde están los pasos a seguir en nuestro proyecto 'bichitos'):
 
 **Para Andesiops:**
 
@@ -231,6 +231,8 @@ Para saber si está instalado el Github y sale:
 > /usr/local/bin/git >  **ubicación del git en la computadora**
 
 **Resto de pasos ver en la página web de la Paty:** https://github.com/pesalerno/MingaGenomica2019/blob/master/git-minga.md
+
+> En resumen se deben usar los comandos "git add + archivo.md", "git status (para ver si se subió el archivo correctamente, debe salir en letras de color verde)", "git commit - m 'mensaje que quieres dar a tus colaboradores o a ti mismo cuando editas el .md'" & "git push origin master (para ya subir los cambios a tu página Git)" luego haces un refresh de la página web donde esta tu Git y verás los cambios realizados.
 
 **Para colaborar:**
 
