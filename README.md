@@ -181,10 +181,27 @@ NOTA: ¡¡¡Cuidar que los mismos sitios tengan el mismo nombre!!!
 Se usa el programa **`denovo_map.pl`**
 
 Código: `denovo_map.pl -M 3 -n 2 -o ./DeNovo_And_R1/ --popmap ./PopMap_And_R1.txt --samples ./Andesiops_R1`
-> -o: output directory  
-> --popmap: archivo popmap  
-> --samples: directorio donde están las muestras  
-> -M y -n son parámetros de STACKS 
+
+**-o:** output directory  
+**--popmap:** archivo popmap  
+**--samples:** directorio donde están las muestras  
+**-m, -M y -n:** son parámetros de STACKS 
+
+Donde:
+
+> -m: [ustacks] Minimum stack depth / minimum depth of coverage (default: 3); para generar stacks idénticos.
+
+> -M: [ustacks] Distance allowed between stacks (default: 2); permite comparar entre los stacks creados en el parámetro -m; cuantos lugares polimórficos se permiten dentro de los individuos para formar un stack, define los heterocigotos dentro de los individuos.
+
+> -N: [ustacks] Permite reincorporar reads (secondary) medios perdidos, para evitar fallas o malas lecturas 
+
+> **Todo estos parámetros anteriores fueron dentro de los individuos (within).** 
+
+> -n: Distance allowed between catalog loci (default: 1), es una comparación entre los stacks entre los individuos, define cuales son parálogos y cuales no. -n bajo para inferencias de una sola especie , para que sean considerados del mismo locus.
+
+>**Este último es para comparaciones entre los individuos (among).** 
+
+Para más información ver: http://catchenlab.life.illinois.edu/stacks/param_tut.php
 	
 	
 ###Tercero: denovo genotyping
@@ -216,10 +233,28 @@ Se creó un archivo ejecutable **.sh** donde se pone todo lo que va a correr en 
 Para esto hicimos:
 
 > macs-MacBook-Pro-2:Limno_PUCE_ddRAD macuser$ chmod +x /Users/macuser/Documents/GenomicaPUCE/MingaGenomica/Hyalella_1.sh 
-> 
+
 > _chmod se lo puede hacer desde cualquier ubicación en mi caso lo hice desde Limno_PUCE_ddRAD_
 
 >  macs-MacBook-Pro-2:MingaGenomica macuser$ ./Hyalella_1.sh 
+
+## Populations:
+
+Luego de correr los `denovo_map.pl` corremos el pipeline de `Populations` de stacks.
+
+Para esto se utilizaron los siguientes parámetros para todos los Tests utilizados con cada bicho: 
+ 
+> -p: 1
+
+> -r: 0.8
+ 
+ `populations -P ./DeNovo_Hya_R1R2_T1 --popmap ./PopMap/PopMap_Hya_sin_rem_2.txt -O ./DeNovo_Hya_R1R2_T1/Populations_Hya_T1 -p 1  -r 0.8 --write_random_snp --vcf`
+ 
+ Lo corrimos nuevamente con un archivo ejecutable: `.sh`, pero antes hicimos al archivo ejecutable con el comando `chmod u+x` y para verificar si es ejecuable el archivo se lo verifica con el comando: `ls -ltrh` y si sale el archivo con `-rwxr--r--@` es que si es ejecutable (debe contener una "x"). 
+ 
+En el caso de Hyalella, hemos visto que al correr populations con un r = 0.8 nos quedamos con poquitos desde cero hasta menos de 10 Loci Kepts y VSRs dependiendo de la variación de m. Pero cuando corrimos con un r = 0.5 los LKs y los VSRs subieron a miles entonces, al parecer hay mucha variación en estas poblaciones de Hyalella.
+
+En Andesiops vamos a escoger al parámetro m = 5; M = 6 y n = 7 donde nos dio una cantidad intermedia de SNPs y de Loci Kept que cuando comparábamos los m = 4 y m = 6, el único parametro con el que los resultados variaron de buena manera fue con m. Ahora vamos a probar combinaciones con n = 4 y n = 5.
 
 
 ## Manejo de Github:
@@ -239,6 +274,8 @@ Para saber si está instalado el Github y sale:
 **Se lo realiza mediante el comando _git pull_, siguiendo los siguientes pasos de la página de la Paty:** 
 https://github.com/pesalerno/PUMAgenomics/blob/master/git-collaborating-protocol.md
 
+Atopsyche parámetros como Andesiops (Vero)
+Anomalocosmoecus como Hyalella (Redro)
 
 
 
