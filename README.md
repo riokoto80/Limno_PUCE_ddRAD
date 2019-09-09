@@ -1,8 +1,8 @@
 # Limno_PUCE_ddRAD
 
-# #ddRAD LimnoPUCE
+## ddRAD LimnoPUCE
 
-## ##Demultiplexing
+### 1. Demultiplexing
 
 Iluimina reconoce el primer y el sitio de corte (restriction site). Si no reconoce al primer, se borra la lectura para mejorar la calidad de los datos.
 
@@ -102,9 +102,9 @@ If error: "(filenames can consist of letters, numbers, '.', '-' and '_')", there
 
 
 
-## ##Denovo mapping
+## 2. _denovo_ mapping
 
-Depues del **demulpitplexing >** se agrupa el contenido de los pools en una carpeta por cada taxa, antes de comezar el denovo mapping.
+Depues del **demultiplexing >** se agrupa el contenido de los pools en una carpeta por cada taxa, antes de comezar el **_de novo_** mapping.
 
 Durante este proceso debemos manejar los nombres de los archivos de cacad carpeta de forma agrupada para editar el texto de los nombres mediante la función _mv_ (move).
 
@@ -151,7 +151,7 @@ Se necesita la linea de comando completo con todos los nombres de los archivos d
 
 ## Notas _de novo_ sequencing macroinvertebrates
 
-###Primero: hay que crear un archivo con los codigos de los individuos y los sitios a los que pertenecen.
+### Primero: hay que crear un archivo con los codigos de los individuos y los sitios a los que pertenecen.
 
 Para hacer esto:  
 
@@ -176,7 +176,7 @@ NOTA: ¡¡¡Cuidar que los mismos sitios tengan el mismo nombre!!!
 > Se puede corregir esto con un grep:
 > ... insert image
 
-###Segundo: denovo sequencing
+### Segundo: denovo sequencing
 
 Se usa el programa **`denovo_map.pl`**
 
@@ -203,8 +203,9 @@ Donde:
 
 Para más información ver: http://catchenlab.life.illinois.edu/stacks/param_tut.php
 	
-	
-###Tercero: denovo genotyping
+
+### Tercero: denovo genotyping
+
 
 Vamos a probar los parámetro óptimos a ser utilizados (para referencia ver página: https://github.com/pesalerno/MingaGenomica2019, donde están los pasos a seguir en nuestro proyecto 'bichitos'):
 
@@ -238,23 +239,169 @@ Para esto hicimos:
 
 >  macs-MacBook-Pro-2:MingaGenomica macuser$ ./Hyalella_1.sh 
 
-## Populations:
+## 3. Populations:
 
 Luego de correr los `denovo_map.pl` corremos el pipeline de `Populations` de stacks.
 
 Para esto se utilizaron los siguientes parámetros para todos los Tests utilizados con cada bicho: 
  
 > -p: 1
-
+ 
 > -r: 0.8
  
  `populations -P ./DeNovo_Hya_R1R2_T1 --popmap ./PopMap/PopMap_Hya_sin_rem_2.txt -O ./DeNovo_Hya_R1R2_T1/Populations_Hya_T1 -p 1  -r 0.8 --write_random_snp --vcf`
  
- Lo corrimos nuevamente con un archivo ejecutable: `.sh`, pero antes hicimos al archivo ejecutable con el comando `chmod u+x` y para verificar si es ejecuable el archivo se lo verifica con el comando: `ls -ltrh` y si sale el archivo con `-rwxr--r--@` es que si es ejecutable (debe contener una "x"). 
+Donde:
+
+> -p,--min-populations [int] — minimum number of populations a locus must be present in to process a locus.
+
+> -r,--min-samples-per-pop [float] — minimum percentage of individuals in a population required to process a locus for that population.
+
+Lo corrimos nuevamente con un archivo ejecutable: `.sh`, pero antes hicimos al archivo ejecutable con el comando `chmod u+x` y para verificar si es ejecuable el archivo se lo verifica con el comando: `ls -ltrh` y si sale el archivo con `-rwxr--r--@` es que si es ejecutable (debe contener una "x"). 
  
 En el caso de Hyalella, hemos visto que al correr populations con un r = 0.8 nos quedamos con poquitos desde cero hasta menos de 10 Loci Kepts y VSRs dependiendo de la variación de m. Pero cuando corrimos con un r = 0.5 los LKs y los VSRs subieron a miles entonces, al parecer hay mucha variación en estas poblaciones de Hyalella.
 
 En Andesiops vamos a escoger al parámetro m = 5; M = 6 y n = 7 donde nos dio una cantidad intermedia de SNPs y de Loci Kept que cuando comparábamos los m = 4 y m = 6, el único parametro con el que los resultados variaron de buena manera fue con m. Ahora vamos a probar combinaciones con n = 4 y n = 5.
+
+## 3.1 Filtrando Matrices:
+
+Primero corrimos un **`populations`** con los parámetros: -p: 1 y -r: 0.1 muy bajos para que no discrimine a los individuos pertenecientes a las diferentes localidades donde fueron colectados para no filtrar de el Test de parámetros donde obtivimos los mejores resultados de LK y VSR.
+
+Instalamos vcftools de acuerdo a la página de la minga genómica:
+
+> git clone https://github.com/vcftools/vcftools
+
+Luego instalamos plink, descargandonos de la página de la minga y al .zip lo descomprimimos para luego ponerlo dentro de una carpeta donde quedará el archivo ejecutable.
+
+Creamos un path al `.bash_profile`: 
+
+> Primero nos fuimos a "Home Directory" con el comando `cd ~`, ahí escribimos `nano .bash_profile` y ahí creamos el path con el comando: `export PATH="/Users/macuser/Documents/GenomicaPUCE/MingaGenomica/plink-1.07-mac-intel :$PATH"`
+
+Después seguimos con el paso de la minga haciendo:
+
+./autogen.sh  **##Desde el directorio de vcftools**
+
+Nos dio un error: 
+> `./autogen.sh: line 3: autoreconf: command not found`
+
+Pusimos: `brew install autoconf automake`
+
+Luego hicimos: `./configure`
+
+## 3.2 Filtros p-link:
+
+Plink ayuda a remover SNPs raros (que estan en pocos individuos), individuos con pocos datos y alelos raros. Para estos analisis primero hay que:
+
+* Mover el ejecutable de plink al directorio donde están los archivos que se van a filtrar (.ped y .map).
+* Luego se filtran los datos en una serie de pasos:
+
+1. Filtrado de Loci (Primero filtramos loci con demasiados datos que faltan, en el % que especifiquemos en el código --geno):
+ `./plink --file input-name --geno 0.5 --recode --out output-filename_a --noweb`
+ 
+ > **Resultados `Hya_T17_a`:**
+ 
+ > **geno 0.5:**
+ 
+  > * `After frequency and genotyping pruning, there are 4202 SNPs`
+  
+ 
+ > **Resultados:**
+ 
+ > **geno 0.5:**
+ 
+  > * `Hya_T17_b`: 20 of 44 individuals removed for low genotyping ( MIND > 0.5 )
+  
+2. Segundo, filtramos individuos con muchos datos que faltan:
+
+`./plink --file input-filename_a --mind 0.5 --recode --out output-filename_b --noweb`
+  
+ 
+3. Minor Alelle Frecuency (Tercero, filtramos basado en frecuencia alelica menor, en el % de individuos que especifiquemos en el código --maf):
+`./plink --file input-filename_b --maf 0.01 --recode --out output-filename_c --noweb`
+
+> **Resultados:**
+
+ > **geno 0.5**:
+ 
+ > * `Hya_T17_c`: 289 SNPs failed frequency test ( MAF < 0.01 ). After frequency and genotyping pruning, there are 3913 SNPs
+  
+**Finalmente nos quedamos con los parámetros:**
+
+> geno: 0.47; mind: 0.5 & maf: 0.01 el cual removió 19 de 44 individuos que no poseen SNPs compartidos en el 53 % de las poblaciones, los cuales son (obtenidos del file .irem):
+
+> 1	`017Hya_G14V`
+2	`018Hya_G14M`
+3	`095Hya_G14M`
+4	`096Hya_G14M`
+5	`113Hya_G14M`
+6	`118Hya_G`
+7	`119Hya_G`
+8	`125Hya_PurV`
+9	`126Hya_PurV`
+10	`127Hya_PurV`
+11	`128Hya_PurV`
+12	`137Hya_V`
+13	`145Hya_PurgM`
+14	`146Hya_PurgM`
+15	`147Hya_PurgM`
+16	`161Hya_M`
+17	`166Hya_PurG`
+18	`193Hya_M`
+19	`194Hya_PurM` 
+
+Puede que sea bueno investigar el efecto de distintos 'minor allele frequency thresholds', por lo que es bueno generar varios outputs con maf 0.01, 0.02, y 0.05, para luego ver en **_adegenet_** (ver abajo) si hay alguna relacion entre maf threshold y estructura poblacional.
+
+Ahora, veamos que tanto 'linkage' hay en nuestros datos, con el siguiente codigo:
+
+`./plink --file input-filename_c --r2 --out outputfilename`
+
+Ejemplo código Vero:
+
+`./plink --file And_T8_c --r2 --out And_T8_Link`
+
+- Blacklist: Es necesario eliminar loci basado en el analisis? De ser el caso, crear un 'blacklist' para excluir en plink con el codigo:
+
+`./plink --file filename --exclude LD-loci-list.txt --recode --out LD-filtered`
+
+   * El blacklist debe estar en formato de un SNP por linea, con la identidad completa (locus mas posicion del SNP).
+
+### Ejemplo Vero:
+
+El input file es el archivo final de lo anterior (aplicados los tres filtros seleccionados). Con esto se obtienen varios archivos (.ld, .log .nosex). El archivo .ld inidca el nivel de linkage entre pares de SNPs y nos sirve para luego excluir SNPs con alto linkage. Para esto: 
+
+- Abrimos el archivo .ld en TextWrangler y lo transformamos a .txt para abrirlo con Excel, donde ordenamos las filas de acuerdo al r2 que representa la proporcion de linkage.   
+
+		Nota 1: En el archivo .ld los nombres de los SNPs estan dados como: 4432:3. El primer número representa el número de locus (Stacks asigna cualquier numero a los locus) y el segundo la posicion del SNP en ese locus.    
+
+		Nota 2: Si excel no lee bien los nombres de las celdas (¡¡¡en nuestro caso les dio formato de fecha!!!) se puede cambiar con TextWrangler los ":" por "-".
+
+- Elegimos un umbral de linkage y excluimos todos los SNPs que tengan un linkage mayor a este umbral. En el caso de _Andesiops_ vamos a excluir SNPs con linkage mayor a 0.6 (con > 0.5 perdemos demasiados SNPs). 
+
+- En la columna SNP_A del excel, elegimos todos los SNPs con r2 mayor o igual a nuestro umbral. Copiamos esas celdas, pegamos en otra hoja de Excel y removemos los duplicados (boton "Remove Duplicates" de la pestaña "Data").
+
+- Copiamos y pegamos esas celdas en un archivo de TextWrangler (cambiamos "-" por ":" de ser necesario) y lo grabamos como .txt con un nombre como "Blacklist_AndT8.txt". Este archivo se va a usar para excluir los SNPs con alto linkage en lo siguiente:
+
+`./plink --file And_T8_c --exclude BlackList_AndT8.txt --recode --out And_T8_d` 
+
+#### Esto nos deja con:
+**2633** SNPs y **72** individuos para _Andesiops_ T8  
+
+**2892** SNPs y **73** individuos para _Andesiops_ T7
+
+
+##Heterocigocidad
+
+Para estimar el nivel de heterocigocidad, que nos da una idea del nivel de endogamia (inbreeding) en las poblaciones, usamos el siguiente código:
+
+`plink --noweb --file mydata --het --out outputfilename`
+
+`./plink --noweb --file And_T8_d --het --out And_T8_Het`
+
+El _input file_ es el output del paso anterior, osea ya filtrado el linkage, en este caso `And_T8_d`.
+
+Esto nos da un archivo .het el cual tiene un valor, F y que es un estimado de inbreeding basado en niveles de heterocigosidad esperada y observada.
+ 
+
 
 
 ## Manejo de Github:
