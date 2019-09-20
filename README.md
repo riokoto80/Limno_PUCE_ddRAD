@@ -66,6 +66,11 @@ El símbolo > nos permite generar un archivo nuevo  a partir del output  de una 
 26828541 retained reads (98.9%)
 
 **Pool 2:**  
+Total Sequences	29801616    
+Barcode Not Found	95236.    
+Low Quality	36857.    
+RAD Cutsite Not Found	216842.         
+Retained Reads	29452681
 
 **Pool 3:**  
 20637354 total sequences  
@@ -82,6 +87,11 @@ El símbolo > nos permite generar un archivo nuevo  a partir del output  de una 
 26439951 retained reads (98.9%)    
 
 **Pool 5:**  
+Total Sequences	29332378.     
+Barcode Not Found	103512.         
+Low Quality	34778.            
+RAD Cutsite Not Found	177205.      
+Retained Reads	29016883
 
 **Pool 6:**  
 24683186 total sequences  
@@ -91,8 +101,18 @@ El símbolo > nos permite generar un archivo nuevo  a partir del output  de una 
 24422396 retained reads (98.9%)  
 
 **Pool 7:**  
+Total Sequences	29365106.    
+Barcode Not Found	111598.       
+Low Quality	36271.        
+RAD Cutsite Not Found	169717.    
+Retained Reads	29047520.
 
 **Pool 8:**  
+Total Sequences	24115006.     
+Barcode Not Found	91558.    
+Low Quality	29237.    
+RAD Cutsite Not Found	167554.    
+Retained Reads	23826657
 
 **IMPORTANT NOTES:**  
 If error: "(filenames can consist of letters, numbers, '.', '-' and '_')", there are probably errors in the barcode file (i.e. extra spaces or unwanted simbols).  
@@ -384,12 +404,20 @@ El input file es el archivo final de lo anterior (aplicados los tres filtros sel
 `./plink --file And_T8_c --exclude BlackList_AndT8.txt --recode --out And_T8_d` 
 
 #### Esto nos deja con:
+
+De lo hecho por Vero con Andesiops:
+
 **2633** SNPs y **72** individuos para _Andesiops_ T8  
 
 **2892** SNPs y **73** individuos para _Andesiops_ T7
 
+De lo hecho por mi con Hyalella:
 
-##Heterocigocidad
+**746** SNPs y **25** individuos para _Hyalella_ T17
+
+
+
+## Heterocigocidad
 
 Para estimar el nivel de heterocigocidad, que nos da una idea del nivel de endogamia (inbreeding) en las poblaciones, usamos el siguiente código:
 
@@ -414,6 +442,23 @@ Para solucionar esto se puede modificar el archivo con grep en TextWrangler de l
 El archivo modificado se debería ver así:  
 
 ![ArchivoStr_Modf](https://github.com/riokoto80/Limno_PUCE_ddRAD/blob/master/Fotos/Screen_Shot_Str2.png)
+
+##QUESTIONS FOR STRUCTURE FILES:
+How many genotypes are there? Número de individuos que quedaron en la matriz .stru
+How many markers are there? Número de SNPs
+Which column contains labels for genotypes ('0' if absent)? 
+Answer:1  
+Which column contains the population factor ('0' if absent)? 
+Answer:2
+Which other optional columns should be read (press 'return' when done)? 
+Which row contains the marker names ('0' if absent)? 
+Answer:1
+Are genotypes coded by a single row (y/n)? Depende si es single branded or double branded
+
+104Hya_G14M Salió como outlier y el individuo 154Hya_M un poco así:
+Subir Foto PCA
+
+Entonces se procede a eliminar el outlier fuerte, para probar y luego haremos lo mismo con el segundo outlier.
 
 
 ## Manejo de Github:
